@@ -1,6 +1,6 @@
 {
   "name": "mssql2json",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Tool for streaming select query from mssql into a json stream",
   "main": "index.js",
   "scripts": {
