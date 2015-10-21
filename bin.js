@@ -3,7 +3,7 @@
 var fromMssql = require('./');
 var fs = require('fs');
 var argv = require('yargs')
-  .usage('Usage: $0 config_file -sql')
+  .usage('Usage: $0 config_file [-q query] [-u unique]')
   .demand(1)
   .alias('q', 'query')
   .describe('q', 'sql query')
