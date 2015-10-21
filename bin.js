@@ -10,10 +10,14 @@ var argv = require('yargs')
   .alias('u', 'unique')
   .describe('u', 'unique field, non-nullable')
   .argv;
+fs.readFile(argv._[0], (err, resp) => {
+  if (err) {
+    throw err;
+  }
+  var config = JSON.parse(resp.toString());
+  var q = argv.q || config.query;
+  var u = argv.u || config.unique;
+  var db = config.db;
 
-var config = JSON.parse(fs.readFileSync(argv._[0], 'utf8'));
-var q = argv.q || config.query;
-var u = argv.u || config.unique;
-var db = config.db;
-
-fromMssql(db, u, q).pipe(process.stdout);
+  fromMssql(db, u, q).pipe(process.stdout);
+});
