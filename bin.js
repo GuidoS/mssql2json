@@ -1,25 +1,19 @@
+'use strict';
+
+var fromMssql = require('./');
+var fs = require('fs');
 var argv = require('yargs')
-  .usage('Usage: $0 config_file [options]')
-  .command('count', 'Count the lines in a file')
+  .usage('Usage: $0 config_file -sql')
   .demand(1)
-  .example('$0 config.json', 'use config file')
-  .demand('f')
-  .alias('f', 'file')
-  .nargs('f', 1)
-  .describe('f', 'Load a file')
-  .help('h')
-  .alias('h', 'help')
-  .epilog('copyright 2015')
+  .alias('q', 'query')
+  .describe('q', 'sql query')
+  .alias('u', 'unique')
+  .describe('u', 'unique field, non-nullable')
   .argv;
 
-var fs = require('fs');
-var s = fs.createReadStream(argv.file);
+var config = JSON.parse(fs.readFileSync(argv._[0], 'utf8'));
+var q = argv.q || config.query;
+var u = argv.u || config.unique;
+var db = config.db;
 
-var lines = 0;
-s.on('data', function (buf) {
-  lines += buf.toString().match(/\n/g).length;
-});
-
-s.on('end', function () {
-  console.log(lines);
-});
+fromMssql(db, u, q).pipe(process.stdout);
