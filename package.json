@@ -6,6 +6,9 @@
   "scripts": {
     "test": "node test.js"
   },
+  "bin": {
+    "mssql2json": "./bin.js"
+  },
   "author": "Guido Stein <guido@guidostein.com> (http://guidostein.com)",
   "license": "MIT",
   "dependencies": {
