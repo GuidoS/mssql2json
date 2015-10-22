@@ -4,7 +4,7 @@ var tedious = require('tedious');
 var JSONStream = require('jsonstream3');
 var noms = require('noms');
 
-module.exports = function fromMssql(db, unique, queryStr) {
+module.exports = function fromMssql(db, queryStr) {
   // build stream and output to stdout
   var out = JSONStream.stringify();
 
@@ -29,9 +29,6 @@ module.exports = function fromMssql(db, unique, queryStr) {
   var readable = noms.obj(function(done) {
     ready.then(() => {
       var items = 0;
-      // var query = `select top ${batchSize} * from (${queryStr}) as t where
-      //   ${unique}  > ${uniqueLast}
-      //   order by ${unique} asc`;
 
       var query = `\
         select top ${batchSize} * from (\
