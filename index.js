@@ -4,7 +4,7 @@ var tedious = require('tedious');
 var JSONStream = require('jsonstream3');
 var noms = require('noms');
 
-module.exports = function fromMssql(db, unique, queryStr) {
+module.exports = function fromMssql(db, queryStr) {
   // build stream and output to stdout
   var out = JSONStream.stringify();
 
@@ -12,8 +12,8 @@ module.exports = function fromMssql(db, unique, queryStr) {
   var connection = new tedious.Connection(db);
 
   // init promises with connection connect event error handling
-  var ready = new Promise(function (success, error) {
-    connection.on('connect', function (err) {
+  var ready = new Promise(function(success, error) {
+    connection.on('connect', function(err) {
       if (err) {
         return error(err);
       }
@@ -23,15 +23,20 @@ module.exports = function fromMssql(db, unique, queryStr) {
 
   // setup looping variables
   var batchSize = 1000;
-  var uniqueLast = -1;
+  var indexLast = 0;
 
   // looping batch sql select routine
-  var readable = noms.obj(function (done) {
+  var readable = noms.obj(function(done) {
     ready.then(() => {
       var items = 0;
-      var query = `select top ${batchSize} * from (${queryStr}) as t where
-        ${unique}  > ${uniqueLast}
-        order by ${unique} asc`;
+
+      var query = `\
+        select top ${batchSize} * from (\
+          select ROW_NUMBER() OVER (order by rField) AS rIndex, * from(\
+            select 'a' as rField, * from(${queryStr}) t\
+          ) tt\
+        ) ttt\
+        where ttt.rIndex > ${indexLast}`;
 
       var command = new tedious.Request(query, err => {
         // is last batch the final batch
@@ -42,17 +47,23 @@ module.exports = function fromMssql(db, unique, queryStr) {
         done(err);
       });
 
+      // on row event from table
       command.on('row', row => {
 
-        // Process row into json and then push to stream
+        // Process row into json
         var o = {};
-        row.forEach(function (c) {
-          o[c.metadata.colName] = c.value;
+        row.forEach(function(c) {
+          var colName = c.metadata.colName;
+          if (colName != 'rIndex' && colName != 'rField') {
+            o[colName] = c.value;
+          }
         });
+
+        // Push row into stream
         this.push(o);
 
         // update looping variables
-        uniqueLast = o[unique];
+        indexLast++;
         items++;
       });
 
