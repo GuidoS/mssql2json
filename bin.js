@@ -1,3 +1,8 @@
+<<<<<<< Updated upstream
+=======
+#!/usr/bin/env node
+
+>>>>>>> Stashed changes
 'use strict';
 
 var fromMssql = require('./');
@@ -9,6 +14,9 @@ var argv = require('yargs')
   .describe('q', 'sql query')
   .alias('u', 'unique')
   .describe('u', 'unique field, non-nullable')
+  .help('h')
+  .alias('h', 'help')
+  .epilog('Copyright (c) 2015 Applied Geographics, Inc.\nLicensed under The MIT License')
   .argv;
 fs.readFile(argv._[0], (err, resp) => {
   if (err) {
