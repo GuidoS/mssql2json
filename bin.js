@@ -1,8 +1,5 @@
-<<<<<<< Updated upstream
-=======
 #!/usr/bin/env node
 
->>>>>>> Stashed changes
 'use strict';
 
 var fromMssql = require('./');
