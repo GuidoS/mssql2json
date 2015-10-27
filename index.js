@@ -5,6 +5,17 @@ var JSONStream = require('jsonstream3');
 var noms = require('noms');
 
 module.exports = function fromMssql(db, queryStr) {
+
+  // basic input validation
+  if (typeof db !== 'object') {
+    throw new Error('mssql2json: db must be an object');
+  }
+
+  if (typeof queryStr !== 'string') {
+    throw new Error('mssql2json: queryStr must be a string');
+  }
+
+
   // build stream and output to stdout
   var out = JSONStream.stringify();
 
