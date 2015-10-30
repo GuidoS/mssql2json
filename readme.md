@@ -3,7 +3,7 @@ mssql2json is a wrapper around the [tedious](https://github.com/pekim/tedious) l
 
 > Please feel free to submit issues and pull requests. If you'd like to contribute and don't know where to start, have a look at [the issue list](https://github.com/GuidoS/mssql2json/issues) :)
 
-# Installation
+# installation
 
 ```
 npm install tedious
