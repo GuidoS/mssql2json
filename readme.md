@@ -9,7 +9,7 @@ mssql2json is a wrapper around the [tedious](https://github.com/pekim/tedious) l
 npm install tedious
 ```
 
-# examples
+# example
 
 ```javascript
 var fromMssql = require('mssql2json');
