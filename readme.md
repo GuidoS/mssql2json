@@ -13,18 +13,19 @@ npm install tedious
 
 ```javascript
 var fromMssql = require('mssql2json');
-var q = 'select * from table';
-var db =  "db": {
-    "server": "test",
-    "userName": "test",
-    "password": "test",
-    "options": {
-      "database": "test",
-      "port": 1433
-    }
 
-  fromMssql(db, q).pipe(process.stdout);
-});
+var q = 'select * table';
+var db = {
+  'server': 'test',
+  'userName': 'test',
+  'password': 'test?Os',
+  'options': {
+    'database': 'test',
+    'port': 1433
+  }
+}
+
+fromMssql(db, q).pipe(process.stdout);
 ```
 
 # inspired by
