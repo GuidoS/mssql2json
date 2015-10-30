@@ -18,7 +18,7 @@ var q = 'select * table';
 var db = {
   'server': 'test',
   'userName': 'test',
-  'password': 'test?Os',
+  'password': 'test',
   'options': {
     'database': 'test',
     'port': 1433
