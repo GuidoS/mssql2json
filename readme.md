@@ -6,7 +6,7 @@ mssql2json is a wrapper around the [tedious](https://github.com/pekim/tedious) l
 # installation
 
 ```
-npm install tedious
+npm install mssql2json
 ```
 
 # example
