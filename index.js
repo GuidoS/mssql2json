@@ -4,11 +4,11 @@ var tedious = require('tedious');
 var JSONStream = require('jsonstream3');
 var noms = require('noms');
 
-module.exports = function fromMssql(db, queryStr) {
+module.exports = function fromMssql(conn, queryStr, batchSize) {
 
   // basic input validation
-  if (typeof db !== 'object') {
-    throw new Error('mssql2json: db must be an object');
+  if (typeof conn !== 'object') {
+    throw new Error('mssql2json: conn must be an object');
   }
 
   if (typeof queryStr !== 'string') {
@@ -20,7 +20,7 @@ module.exports = function fromMssql(db, queryStr) {
   var out = JSONStream.stringify();
 
   // init connection object
-  var connection = new tedious.Connection(db);
+  var connection = new tedious.Connection(conn);
 
   // init promises with connection connect event error handling
   var ready = new Promise(function (success, error) {
@@ -33,7 +33,6 @@ module.exports = function fromMssql(db, queryStr) {
   });
 
   // setup looping variables
-  var batchSize = 1000;
   var indexLast = 0;
 
   // looping batch sql select routine
@@ -83,6 +82,6 @@ module.exports = function fromMssql(db, queryStr) {
   });
 
   // output values to stdstream
-  readable.pipe(out);
+  readable.on('error', e => out.emit('error', e)).pipe(out);
   return out;
 };

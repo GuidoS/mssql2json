@@ -14,18 +14,21 @@ npm install mssql2json
 ```javascript
 var fromMssql = require('mssql2json');
 
-var q = 'select * table';
-var db = {
-  'server': 'test',
-  'userName': 'test',
-  'password': 'test',
-  'options': {
-    'database': 'test',
-    'port': 1433
+var config = {
+  'query': `select * table`,
+  'batchSize': 2,
+  'conn': {
+    'server': 'test',
+    'userName': 'test',
+    'password': 'test',
+    'options': {
+      'database': 'test',
+      'port': 1433
+    }
   }
-}
+};
 
-fromMssql(db, q).pipe(process.stdout);
+fromMssql(config.connection, config.query, config.batchSize).pipe(process.stdout);
 ```
 
 # inspired by
