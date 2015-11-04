@@ -1,14 +1,16 @@
 'use strict';
 
 var fromMssql = require('./');
+
 var test = require('tape');
 var JSONStream = require('jsonstream3');
 var fs = require('fs');
+
 var testSize = 10;
 
 // t1 test config
 var t1Config = {
-  'query': `select top ${testSize} * table`,
+  'query': `select top ${testSize} * from table`,
   'batchSize': 2,
   'conn': {
     'server': 'test',
@@ -36,7 +38,8 @@ test(`(t1) ${testSize} items requested`, function (t) {
 
   fromMssql(t1Config.conn, t1Config.query, t1Config.batchSize)
     .on('data', (data) => {
-      items = (data.indexOf('\n') != -1) ? items : items + 1;
+      items = (data.substr(-1, 1) === '\n') ? items : items + 1;
+      console.log(items, data);
     })
     .on('error', e => t.error(e))
     .on('end', () => {
