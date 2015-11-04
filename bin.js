@@ -15,7 +15,7 @@ var argv = require('yargs')
   .describe('c', 'connection information object')
   .help('h')
   .alias('h', 'help')
-  .example(`$0 config.json -q 'select * from realproperty'`, `use config file, overide query in config`)
+  .example(`$0 config.json -q 'select * from table'`, `use config file, overide query in config`)
   .epilog('Copyright (c) 2015 Applied Geographics, Inc.\nLicensed under The MIT License')
   .argv;
 
@@ -32,4 +32,5 @@ fs.readFile(argv._[0], (err, resp) => {
   var b = argv.b || config.batchSize;
 
   fromMssql(c, q, b).pipe(process.stdout);
+  
 });
