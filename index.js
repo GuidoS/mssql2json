@@ -1,10 +1,13 @@
 'use strict';
 
 var tedious = require('tedious');
+
 var JSONStream = require('jsonstream3');
 var noms = require('noms');
 
-module.exports = function fromMssql(conn, queryStr, batchSize) {
+module.exports = fromMssql;
+
+function fromMssql(conn, queryStr, batchSize) {
 
   // basic input validation
   if (typeof conn !== 'object') {
