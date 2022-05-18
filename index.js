@@ -49,7 +49,7 @@ function fromMssql(conn, queryStr, batchSize) {
             select 'a' as rField, * from(${queryStr}) t
           ) tt
         ) ttt
-        where ttt.rIndex > ${indexLast}`;
+        where ttt.rIndex > CAST(${indexLast} AS BIGINT)`;
 
       var command = new tedious.Request(query, err => {
         // is last batch the final batch
